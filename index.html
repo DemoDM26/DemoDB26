@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Marking System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f4f6f9;
+    }
+
+    header {
+      background: #2563eb;
+      color: white;
+      padding: 15px 20px;
+      text-align: center;
+    }
+
+    nav {
+      background: #1e40af;
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #1e3a8a;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    table th {
+      background: #e0e7ff;
+    }
+
+    input, select, button {
+      padding: 8px;
+      margin: 5px 0;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    footer {
+      background: #1e40af;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Digital Marking System</h1>
+    <p>Simple Frontend Interface</p>
+  </header>
+
+  <nav>
+    <a href="#dashboard">Dashboard</a>
+    <a href="#students">Students</a>
+    <a href="#marks">Marks</a>
+    <a href="#results">Results</a>
+  </nav>
+
+  <div class="container">
+
+    <!-- Dashboard -->
+    <div class="card" id="dashboard">
+      <h2>Dashboard</h2>
+      <p>Welcome to the Digital Marking System.</p>
+      <p>Use the menu to manage students and marks.</p>
+    </div>
+
+    <!-- Students Section -->
+    <div class="card" id="students">
+      <h2>Student Management</h2>
+
+      <input type="text" id="studentName" placeholder="Enter student name">
+      <button onclick="addStudent()">Add Student</button>
+
+      <table id="studentTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- Marks Section -->
+    <div class="card" id="marks">
+      <h2>Enter Marks</h2>
+
+      <select id="studentSelect">
+        <option value="">Select Student</option>
+      </select>
+
+      <input type="number" id="marksInput" placeholder="Enter marks">
+
+      <button onclick="addMarks()">Save Marks</button>
+    </div>
+
+    <!-- Results Section -->
+    <div class="card" id="results">
+      <h2>Results</h2>
+
+      <table id="resultTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Marks</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>© 2026 Digital Marking System | Frontend Demo</p>
+  </footer>
+
+  <script>
+    let students = [];
+
+    function addStudent() {
+      const name = document.getElementById("studentName").value.trim();
+
+      if (name === "") {
+        alert("Please enter student name");
+        return;
+      }
+
+      students.push({ name: name, marks: null });
+
+      document.getElementById("studentName").value = "";
+
+      updateStudentTable();
+      updateStudentSelect();
+      updateResultTable();
+    }
+
+    function addMarks() {
+      const index = document.getElementById("studentSelect").value;
+      const marks = document.getElementById("marksInput").value;
+
+      if (index === "" || marks === "") {
+        alert("Please select student and enter marks");
+        return;
+      }
+
+      students[index].marks = marks;
+
+      document.getElementById("marksInput").value = "";
+
+      updateResultTable();
+    }
+
+    function updateStudentTable() {
+      const tbody = document.querySelector("#studentTable tbody");
+      tbody.innerHTML = "";
+
+      students.forEach((student, i) => {
+        const row = `<tr>
+          <td>${i + 1}</td>
+          <td>${student.name}</td>
+        </tr>`;
+
+        tbody.innerHTML += row;
+      });
+    }
+
+    function updateStudentSelect() {
+      const select = document.getElementById("studentSelect");
+      select.innerHTML = '<option value="">Select Student</option>';
+
+      students.forEach((student, i) => {
+        const option = `<option value="${i}">${student.name}</option>`;
+        select.innerHTML += option;
+      });
+    }
+
+    function updateResultTable() {
+      const tbody = document.querySelector("#resultTable tbody");
+      tbody.innerHTML = "";
+
+      students.forEach((student, i) => {
+        const marks = student.marks !== null ? student.marks : "Not Entered";
+
+        const row = `<tr>
+          <td>${i + 1}</td>
+          <td>${student.name}</td>
+          <td>${marks}</td>
+        </tr>`;
+
+        tbody.innerHTML += row;
+      });
+    }
+  </script>
+
+</body>
+</html>
